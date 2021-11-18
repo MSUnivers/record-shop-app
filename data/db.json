@@ -1,0 +1,42 @@
+{
+  "records": [
+    {
+      "title": "pop",
+      "author": "madonna",
+      "id": "1637263055641"
+    },
+    {
+      "title": "rap",
+      "author": "madonna",
+      "id": "1637263070619"
+    },
+    {
+      "article": "kuchen",
+      "qtte": "10",
+      "id": "1637263327172"
+    }
+  ],
+  "users": [],
+  "orders": [
+    {
+      "article": "kuchen",
+      "qtte": "10",
+      "id": "1637263615713"
+    },
+    {
+      "article": "tee",
+      "qtte": "10",
+      "id": "1637263693342"
+    },
+    {
+      "name": "maroua",
+      "addresse": "germany",
+      "id": "1637263776913"
+    },
+    {
+      "title": "rap",
+      "author": "jsx",
+      "id": "1637263848121"
+    }
+  ]
+}
