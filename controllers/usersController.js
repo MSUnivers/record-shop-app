@@ -7,15 +7,19 @@ exports.getAllUsersController = (req, res) => {
   let allUsers = db.get("users");
   res.send(allUsers);
 };
-exports.postUserController = (req, res) => {
+exports.postUserController = (req, res, next) => {
   let user = req.body;
+  if (user.hasOwnProperty("username")) {
   db.get("users")
     .push(user)
     .last()
     .assign({ id: Date.now().toString() })
     .write();
-
-  res.send(user);
+    res.send('user well posted');
+  } else {
+    const err = new Error("this request has no username property");
+    next(err);
+  }
 };
 
 exports.getUserByIdController = (req, res) => {

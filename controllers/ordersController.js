@@ -2,32 +2,69 @@ const low = require("lowdb");
 const FileSync = require("lowdb/adapters/FileSync");
 const adapter = new FileSync("data/db.json");
 const db = low(adapter);
+const Order = require("../models/Orders.js");
 
-exports.getAllOrdersController = (req, res) => {
-  let allorders = db.get("orders");
-  res.send(allorders);
+exports.getAllOrdersController = async (req, res, next) => {
+  /**code to fetch data from db atlas */
+  try {
+    const allOrders = await Order.find()
+    res.send(allOrders)
+  } catch (error) {
+    next(error);
+  }
+  /**Code to fetch data from lowdb */
+  /*  let allorders = db.get("orders"); */
+  //res.send(allorders);
 };
-exports.postOrdersController = (req, res) => {
-  let order = req.body;
- db.get("orders")
-    .push(order)
-    .last()
-    .assign({ id: Date.now().toString() })
-    .write();
-res.end()
+exports.postOrdersController = async (req, res, next) => {
+  try {
+
+    const order = new Order(req.body)
+    await order.save()
+    res.send(order);
+  } catch (error) {
+    next(error);
+  }
 };
 
-exports.getOrderByIdController = (req, res) => {
-  let order = db.get("orders").find({ id: req.params.id });
-  res.send(order);
+exports.getOrderByIdController = async (req, res, next) => {
+  /** code with MD ATLAS */
+
+  try {
+    let requestedOrder = req.params.id;
+    const selectedOrder = await Order.findOne({ id: requestedOrder })
+    res.send(selectedOrder)
+
+  } catch (error) {
+
+  }
+
+  /**code with lowdb */
+  /*  let order = db.get("orders").find({ id: req.params.id });
+   res.send(order); */
 };
 
-exports.updateOrderByIdController = (req, res) => {
-  db.get("orders").find({ id: req.params.id }).assign(req.body).write();
-  res.send("the user was updated successfully");
+exports.updateOrderByIdController = async (req, res, next) => {
+  /* db.get("orders").find({ id: req.params.id }).assign(req.body).write();
+  res.send("the user was updated successfully"); */
+  try {
+    const order = await Order.findByIdAndUpdate(req.params.id, req.body, { new: true })
+    res.status(200).send(order)
+  } catch (error) {
+    next(error);
+  }
 };
 
-exports.deleteOrderByIdController = (req, res) => {
-  db.get("orders").remove({ id: req.params.id }).write();
-  res.send("the user was deleted successfully");
+exports.deleteOrderByIdController = async(req, res,next) => {
+  /**code with DB ATLAS */
+try {
+  let selectedOrder=req.params.id;
+  const deletedOrder=await Order.deleteOne({id:selectedOrder})
+  res.send(deletedOrder)
+} catch (error) {
+  next(error)
+}
+  /**code with lowdb */
+  /* db.get("orders").remove({ id: req.params.id }).write();
+  res.send("the user was deleted successfully"); */
 };
