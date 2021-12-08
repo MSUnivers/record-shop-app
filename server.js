@@ -2,9 +2,11 @@ const express = require('express');
 const recordsRouter = require('./routes/records');
 const usersRouter = require('./routes/users');
 const ordersRouter = require('./routes/orders');
+const addressRouter=require('./routes/addresses');
 require('dotenv').config()
 const app = express();
 const low = require('lowdb');
+require('dotenv').config()
 const FileSync = require('lowdb/adapters/FileSync');
 const adapter = new FileSync('data/db.json');
 const db = new low(adapter);
@@ -38,6 +40,7 @@ db.defaults({ records: [], users: [], orders: [] }).write();
 app.use('/records', recordsRouter);
 app.use('/users', usersRouter);
 app.use('/orders', ordersRouter);
+app.use('/addresses',addressRouter)
 //error handler only for requests that has no handler (route)
 app.use(function (req, res, next) {
   const err = new Error('This route is not defined yet');
@@ -48,6 +51,7 @@ app.use(function (req, res, next) {
 
 
 //main error handler middleware
-app.use(mainErrorHandler)
+app.use(mainErrorHandler);
+ 
 const port = process.env.PORT || 3008;
 app.listen(port, () => { console.log('the server is up and running on the port: ' + port) });

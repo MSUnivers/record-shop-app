@@ -2,20 +2,23 @@ const low = require("lowdb");
 const FileSync = require("lowdb/adapters/FileSync");
 const adapter = new FileSync("data/db.json");
 const db = low(adapter);
+const UserSchema=require('../models/Users');
 
 exports.getAllUsersController = (req, res) => {
   let allUsers = db.get("users");
   res.send(allUsers);
 };
-exports.postUserController = (req, res, next) => {
+exports.postUserController = async (req, res, next) => {
   let user = req.body;
-  if (user.hasOwnProperty("username")) {
-  db.get("users")
+  if (user.hasOwnProperty("userName")) {
+const newUser=await UserSchema.create(user)
+res.status(200).send(newUser);
+  /* db.get("users")
     .push(user)
     .last()
     .assign({ id: Date.now().toString() })
     .write();
-    res.send('user well posted');
+    res.send('user well posted'); */
   } else {
     const err = new Error("this request has no username property");
     next(err);
